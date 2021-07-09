@@ -80,16 +80,18 @@ import useTheme from "next-theme";
 function ThemeButtons() {
   const {setTheme, toggle, theme} = useTheme();
   return (
-    <h1>Current theme: {theme}</h1>
-    <button type="button" onClick={toggle}>
-      Toggle theme
-    </button>
-    <button type="button" onClick={() => setTheme("light")}>
-      Light theme
-    </button>
-    <button type="button" onClick={() => setTheme("dark")}>
-      Dark theme
-    </button>
+    <>
+      <h1>Current theme: {theme}</h1>
+      <button type="button" onClick={toggle}>
+        Toggle theme
+      </button>
+      <button type="button" onClick={() => setTheme("light")}>
+        Light theme
+      </button>
+      <button type="button" onClick={() => setTheme("dark")}>
+        Dark theme
+      </button>
+    </>
   );
 }
 ```
