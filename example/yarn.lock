@@ -1585,10 +1585,10 @@ native-url@0.3.4:
   dependencies:
     querystring "^0.2.0"
 
-next-theme@0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/next-theme/-/next-theme-0.1.4.tgz#67320b6421791cb1c5330ace037a6c463f743753"
-  integrity sha512-k9kltym0UKb4Cku/k64TwTOlYdKpqLb/+F8oMaksgPfSCqD/cXwjknAtZMXiRxX1sQR+fyFXmAjZ9tLnSRyPpg==
+next-theme@0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/next-theme/-/next-theme-0.1.5.tgz#aa6655c516892925e577349d7715a8ed54bad727"
+  integrity sha512-WR8UCLEFjWvRl+UO2lTM4pGo7R4jzGZqQ6YL3hiL1Ns587Qb91GhJZLPu/Aa4ExtGQ/5wlcDX8zDYZoCN9oDPw==
 
 next@11.0.1:
   version "11.0.1"

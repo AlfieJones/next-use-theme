@@ -1,37 +1,7 @@
 import React, { useEffect, FC, useCallback, memo, useState } from "react";
 import Head from "next/head";
-import Defaults from "./defaults.index";
-
-export type ThemeProviderProps = {
-  /** Use media query to toggle the theme between light and dark */
-  mediaQuery?: boolean;
-  /** Should we set the HTML attribute, defaults to true. If set to false handling the theme change is up to you */
-  setAttribute?: boolean;
-  /** The HTML attribute to be set. Defaults to class */
-  attribute?: `data-${string}` | "class";
-  /** List of all available theme names, defaults to the two props [lightTheme, darkTheme], eg ["lightTheme", "darkTheme"] */
-  themes?: string[];
-  /** Dark theme name, defaults to dark */
-  darkTheme?: string;
-  /** Light theme name, defaults to light */
-  lightTheme?: string;
-  /** Key used to store theme setting in localStorage */
-  storageKey?: string;
-  /** Default theme, defaults to light */
-  defaultTheme?: string;
-  /** The components children */
-  children?: React.ReactNode;
-};
-
-// This is the type for our context usage
-export type UseThemeContext = {
-  /** List of all available theme names, defaults to the two props [lightTheme, darkTheme], eg ["lightTheme", "darkTheme"] */
-  themes: string[];
-  /** The function to call when we want to change the theme */
-  handleChange: (theme: string) => void;
-  /** The current theme value */
-  value: string;
-};
+import { ThemeProviderProps, UseThemeContext } from "./index.props";
+import Defaults from "./index.defaults";
 
 function handleTheme(theme: string, themes: string[], attribute: string) {
   const root = document.documentElement;
@@ -69,20 +39,16 @@ const ThemeScript = memo(
     // My attempt at minimising the script code
     // This code handles the Flash of incorrect theme or (FOIT)
     // THis isn't fun
-
     const getElement = (() => {
       if (attribute === "class") {
         return `var d=document.documentElement.classList;`;
       }
       return "var d=document.documentElement;";
     })();
-
     const setAttr = (theme: string) => {
       if (attribute === "class") return `d.add(${theme})`;
-
       return `d.setAttribute('${attribute}', ${theme})`;
     };
-
     // TODO come back when NextJS Script component works for our use case
     return (
       <Head>
@@ -107,7 +73,6 @@ const ThemeScript = memo(
     );
   }
 );
-
 const ThemeProvider: FC<ThemeProviderProps> = ({
   attribute = Defaults.attribute,
   defaultTheme = Defaults.defaultTheme,
@@ -120,12 +85,10 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
   children,
 }: ThemeProviderProps) => {
   const [activeTheme, setActiveTheme] = useState<string | undefined>();
-
   useEffect(() => {
     if (activeTheme !== undefined)
       localStorage.setItem(storageKey, activeTheme);
   }, [activeTheme, storageKey]);
-
   // Applies the theme to the specified attribute
   const applyAttribute = useCallback(
     (theme: string) => {
@@ -141,7 +104,6 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
     },
     [attribute, setAttribute, themes]
   );
-
   // Handles all our theme changes
   const handleChange = useCallback(
     (theme: string) => {
