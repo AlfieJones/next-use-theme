@@ -1,0 +1,8 @@
+
+node_modules
+src
+.vscode
+.eslintrc.json
+example
+tsconfig.json
+.prettierignore
