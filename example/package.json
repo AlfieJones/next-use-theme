@@ -8,13 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
-    "@types/use-persisted-state": "^0.3.0",
-    "beautiful-react-hooks": "^0.35.0",
     "next": "11.0.1",
+    "next-theme": "^0.0.4",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "use-local-storage-state": "^10.0.0",
-    "use-persisted-state": "^0.3.3"
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@types/react": "17.0.14",

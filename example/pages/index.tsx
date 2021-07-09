@@ -1,6 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import useTheme from "../src";
+import useTheme from "next-theme";
 
 export default function Home() {
   const { toggle, setTheme, theme } = useTheme();
