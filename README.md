@@ -10,7 +10,7 @@
   <h1 align="center">Next Theme</h1>
 
   <p align="center">
-    A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded Flash of incorrect theme
+    A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded flash of incorrect theme
   </p>
 </p>
 
