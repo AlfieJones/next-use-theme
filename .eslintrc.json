@@ -9,6 +9,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/no-danger": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "no-param-reassign": "off"
   }
 }

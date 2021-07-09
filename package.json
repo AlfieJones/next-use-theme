@@ -1,9 +1,12 @@
 {
   "name": "next-theme",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded Flash of incorrect theme",
   "license": "MIT",
-  "repository": "https://github.com/AlfieJones/next-theme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlfieJones/next-theme.git"
+  },
   "author": {
     "name": "Alfie Jones",
     "url": "https://alfie-jones.com"
@@ -14,7 +17,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "microbundle --jsx React.createElement --compress --no-sourcemap",
-    "dev": "microbundle watch"
+    "dev": "microbundle watch --jsx React.createElement --compress --no-sourcemap"
   },
   "peerDependencies": {
     "next": "*",

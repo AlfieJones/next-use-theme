@@ -1,6 +1,4 @@
 export interface ThemeProviderProps {
-  /** Called when the theme changes */
-  onChange?: (theme: string) => void;
   /** Use media query to toggle the theme between light and dark */
   mediaQuery?: boolean;
   /** Should we set the HTML attribute, defaults to true. If set to false handling the theme change is up to you */

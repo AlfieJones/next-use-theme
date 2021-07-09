@@ -1585,10 +1585,8 @@ native-url@0.3.4:
   dependencies:
     querystring "^0.2.0"
 
-next-theme@^0.0.4:
+"next-theme@file:..":
   version "0.0.4"
-  resolved "https://registry.yarnpkg.com/next-theme/-/next-theme-0.0.4.tgz#92ead629f50885e82c364ee5c8b24236456d3009"
-  integrity sha512-uD9qkmgucb7yuLuUTXVdiaiEk1gtAsyrzaDucR+Z7jVfEjNqeFdHlekT/dsOuc5svFVIFUF/zdJP2rUV6Izdsg==
 
 next@11.0.1:
   version "11.0.1"

@@ -87,37 +87,18 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
   setAttribute = Defaults.setAttribute,
   mediaQuery = Defaults.mediaQuery,
   themes = [lightTheme, darkTheme],
-  onChange,
   children,
 }: ThemeProviderProps) => {
   const [activeTheme, setActiveTheme] = useState<string | undefined>();
 
   useEffect(() => {
-    if (activeTheme) localStorage.setItem(storageKey, activeTheme);
+    if (activeTheme !== undefined)
+      localStorage.setItem(storageKey, activeTheme);
   }, [activeTheme, storageKey]);
 
-  useEffect(() => {
-    let theme = localStorage.getItem(storageKey);
-    if (theme === null) {
-      if (mediaQuery) {
-        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? darkTheme
-          : lightTheme;
-      } else {
-        theme = defaultTheme;
-      }
-    }
-    setActiveTheme(theme);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (activeTheme) handleTheme(activeTheme, themes, attribute);
-  }, [activeTheme, themes, attribute]);
-
-  const handleChange = useCallback(
+  // Applies the theme to the specified attribute
+  const applyAttribute = useCallback(
     (theme: string) => {
-      setActiveTheme(theme);
       if (setAttribute) {
         const root = document.documentElement;
         if (attribute === "class") {
@@ -127,11 +108,61 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
           root.setAttribute(attribute, theme);
         }
       }
-      if (onChange) onChange(theme);
     },
-    [attribute, onChange, setActiveTheme, setAttribute, themes]
+    [attribute, setAttribute, themes]
   );
 
+  // Handles all our theme changes
+  const handleChange = useCallback(
+    (theme: string) => {
+      if (theme === "system" && mediaQuery) {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? darkTheme
+          : lightTheme;
+      }
+      if (themes.includes(theme)) {
+        setActiveTheme(theme);
+        applyAttribute(theme);
+      } else {
+        throw new Error(
+          `Unknown theme: ${theme}. Have you included it in the themes prop?`
+        );
+      }
+    },
+    [applyAttribute, darkTheme, lightTheme, mediaQuery, themes]
+  );
+
+  const handleStorageEvent = useCallback(
+    (event: StorageEvent) => {
+      if (event.key === storageKey) {
+        handleChange(event.newValue || defaultTheme);
+      }
+    },
+    [defaultTheme, handleChange, storageKey]
+  );
+
+  useEffect(() => {
+    window.addEventListener("storage", handleStorageEvent);
+    let theme = localStorage.getItem(storageKey);
+    if (theme === "system" || theme === null) {
+      if (mediaQuery) {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? darkTheme
+          : lightTheme;
+      } else {
+        theme = defaultTheme;
+      }
+    }
+    setActiveTheme(theme);
+    return () => window.removeEventListener("storage", handleStorageEvent);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (activeTheme) handleTheme(activeTheme, themes, attribute);
+  }, [activeTheme, themes, attribute]);
+
+  // Listener for system theme changes
   const mqlListener = useCallback(
     (e) => {
       handleChange(e.matches ? darkTheme : lightTheme);
