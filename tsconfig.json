@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": ["dom", "ES2021"],
+    "target": "ESNEXT",
+    "module": "ESNEXT",
+    "lib": ["dom", "ESNEXT"],
     "sourceMap": true,
-    "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
@@ -12,6 +11,9 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "declaration": true,
+  },
+  "include":["src"],
+  "exclude": ["example", "dist", "node_modules", "rollup.config.js"]
 }
