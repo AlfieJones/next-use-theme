@@ -1,8 +1,8 @@
-<header align="center">
+<div align="center">
     <img alt="NPM version" src="https://img.shields.io/npm/v/next-theme?style=for-the-badge">
     <img alt="NPM downloads" src="https://img.shields.io/npm/dm/next-theme?style=for-the-badge">
     <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/alfieJones/next-theme?style=for-the-badge">
-</header>
+</div>
 
 <!-- PROJECT LOGO -->
 <br />
