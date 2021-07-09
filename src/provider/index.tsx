@@ -1,7 +1,37 @@
 import React, { useEffect, FC, useCallback, memo, useState } from "react";
 import Head from "next/head";
-import { ThemeProviderProps, UseThemeContext } from "./index.props";
-import Defaults from "./index.defaults";
+import Defaults from "./defaults.index";
+
+export type ThemeProviderProps = {
+  /** Use media query to toggle the theme between light and dark */
+  mediaQuery?: boolean;
+  /** Should we set the HTML attribute, defaults to true. If set to false handling the theme change is up to you */
+  setAttribute?: boolean;
+  /** The HTML attribute to be set. Defaults to class */
+  attribute?: `data-${string}` | "class";
+  /** List of all available theme names, defaults to the two props [lightTheme, darkTheme], eg ["lightTheme", "darkTheme"] */
+  themes?: string[];
+  /** Dark theme name, defaults to dark */
+  darkTheme?: string;
+  /** Light theme name, defaults to light */
+  lightTheme?: string;
+  /** Key used to store theme setting in localStorage */
+  storageKey?: string;
+  /** Default theme, defaults to light */
+  defaultTheme?: string;
+  /** The components children */
+  children?: React.ReactNode;
+};
+
+// This is the type for our context usage
+export type UseThemeContext = {
+  /** List of all available theme names, defaults to the two props [lightTheme, darkTheme], eg ["lightTheme", "darkTheme"] */
+  themes: string[];
+  /** The function to call when we want to change the theme */
+  handleChange: (theme: string) => void;
+  /** The current theme value */
+  value: string;
+};
 
 function handleTheme(theme: string, themes: string[], attribute: string) {
   const root = document.documentElement;
@@ -87,37 +117,18 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
   setAttribute = Defaults.setAttribute,
   mediaQuery = Defaults.mediaQuery,
   themes = [lightTheme, darkTheme],
-  onChange,
   children,
 }: ThemeProviderProps) => {
   const [activeTheme, setActiveTheme] = useState<string | undefined>();
 
   useEffect(() => {
-    if (activeTheme) localStorage.setItem(storageKey, activeTheme);
+    if (activeTheme !== undefined)
+      localStorage.setItem(storageKey, activeTheme);
   }, [activeTheme, storageKey]);
 
-  useEffect(() => {
-    let theme = localStorage.getItem(storageKey);
-    if (theme === null) {
-      if (mediaQuery) {
-        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? darkTheme
-          : lightTheme;
-      } else {
-        theme = defaultTheme;
-      }
-    }
-    setActiveTheme(theme);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (activeTheme) handleTheme(activeTheme, themes, attribute);
-  }, [activeTheme, themes, attribute]);
-
-  const handleChange = useCallback(
+  // Applies the theme to the specified attribute
+  const applyAttribute = useCallback(
     (theme: string) => {
-      setActiveTheme(theme);
       if (setAttribute) {
         const root = document.documentElement;
         if (attribute === "class") {
@@ -127,11 +138,61 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
           root.setAttribute(attribute, theme);
         }
       }
-      if (onChange) onChange(theme);
     },
-    [attribute, onChange, setActiveTheme, setAttribute, themes]
+    [attribute, setAttribute, themes]
   );
 
+  // Handles all our theme changes
+  const handleChange = useCallback(
+    (theme: string) => {
+      if (theme === "system" && mediaQuery) {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? darkTheme
+          : lightTheme;
+      }
+      if (themes.includes(theme)) {
+        setActiveTheme(theme);
+        applyAttribute(theme);
+      } else {
+        throw new Error(
+          `Unknown theme: ${theme}. Have you included it in the themes prop?`
+        );
+      }
+    },
+    [applyAttribute, darkTheme, lightTheme, mediaQuery, themes]
+  );
+
+  const handleStorageEvent = useCallback(
+    (event: StorageEvent) => {
+      if (event.key === storageKey) {
+        handleChange(event.newValue || defaultTheme);
+      }
+    },
+    [defaultTheme, handleChange, storageKey]
+  );
+
+  useEffect(() => {
+    window.addEventListener("storage", handleStorageEvent);
+    let theme = localStorage.getItem(storageKey);
+    if (theme === "system" || theme === null) {
+      if (mediaQuery) {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? darkTheme
+          : lightTheme;
+      } else {
+        theme = defaultTheme;
+      }
+    }
+    setActiveTheme(theme);
+    return () => window.removeEventListener("storage", handleStorageEvent);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (activeTheme) handleTheme(activeTheme, themes, attribute);
+  }, [activeTheme, themes, attribute]);
+
+  // Listener for system theme changes
   const mqlListener = useCallback(
     (e) => {
       handleChange(e.matches ? darkTheme : lightTheme);
