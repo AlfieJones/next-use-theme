@@ -1,3 +1,5 @@
+import getStorageProvider from "./storage";
+
 const Defaults = {
   attribute: "class" as "class" | `data-${string}`,
   darkTheme: "dark",
@@ -5,7 +7,7 @@ const Defaults = {
   lightTheme: "light",
   mediaQuery: true,
   setAttribute: true,
-  storageKey: "theme",
+  storageProviders: [getStorageProvider({ type: "LocalStorage" })],
   themes: ["light", "dark"],
 };
 

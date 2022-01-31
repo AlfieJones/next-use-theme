@@ -2,6 +2,7 @@ import React, { useEffect, FC, useCallback, memo, useState } from "react";
 import Head from "next/head";
 import { ThemeProviderProps, UseThemeContext } from "./index.props";
 import Defaults from "./index.defaults";
+import { StorageProviderType } from "./storage/storage.types";
 
 function handleTheme(theme: string, themes: string[], attribute: string) {
   const root = document.documentElement;
@@ -20,23 +21,26 @@ export const ThemeContext = React.createContext<UseThemeContext>({
   handleChange: () => {},
 });
 
+const setInject = (providers: StorageProviderType[]): string =>
+  `try{${providers.shift()?.codeInject}}catch(_){}${setInject(providers)}`;
+
 const ThemeScript = memo(
   ({
-    storageKey,
+    storageProviders,
     attribute,
     mediaQuery,
     defaultTheme,
     darkTheme,
     lightTheme,
   }: {
-    storageKey: string;
+    storageProviders: StorageProviderType[];
     attribute: `data-${string}` | "class";
     mediaQuery: boolean;
     defaultTheme: string;
     darkTheme: string;
     lightTheme: string;
   }) => {
-    // My attempt at minimising the script code
+    // My attempt at minimizing the script code
     // This code handles the Flash of incorrect theme or (FOIT)
     // THis isn't fun
     const getElement = (() => {
@@ -52,23 +56,14 @@ const ThemeScript = memo(
     // TODO come back when NextJS Script component works for our use case
     return (
       <Head>
-        {mediaQuery ? (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `${getElement}!function(){try{var e=localStorage.getItem('${storageKey}');e||(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}")}catch(e){}e||(e="${defaultTheme}");${setAttr(
-                "e"
-              )}}();`,
-            }}
-          />
-        ) : (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `${getElement}!function(){try{var e=localStorage.getItem('${storageKey}');}catch(e){}e||(e="${defaultTheme}");${setAttr(
-                "e"
-              )}}();`,
-            }}
-          />
-        )}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `${getElement}!function(){${setInject(storageProviders)}${
+              mediaQuery &&
+              `try{e??e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}")}catch(_){}`
+            }e??(e="${defaultTheme}");${setAttr("e")}}();`,
+          }}
+        />
       </Head>
     );
   }
@@ -76,7 +71,7 @@ const ThemeScript = memo(
 const ThemeProvider: FC<ThemeProviderProps> = ({
   attribute = Defaults.attribute,
   defaultTheme = Defaults.defaultTheme,
-  storageKey = Defaults.storageKey,
+  storageProviders = Defaults.storageProviders,
   darkTheme = Defaults.darkTheme,
   lightTheme = Defaults.lightTheme,
   setAttribute = Defaults.setAttribute,
@@ -85,10 +80,15 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
   children,
 }: ThemeProviderProps) => {
   const [activeTheme, setActiveTheme] = useState<string | undefined>();
+
+  // Keeps our storage providers updated
   useEffect(() => {
     if (activeTheme !== undefined)
-      localStorage.setItem(storageKey, activeTheme);
-  }, [activeTheme, storageKey]);
+      storageProviders.forEach(
+        (theme) => theme.onChange && theme.onChange(activeTheme)
+      );
+  }, [activeTheme, storageProviders]);
+
   // Applies the theme to the specified attribute
   const applyAttribute = useCallback(
     (theme: string) => {
@@ -105,7 +105,7 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
     [attribute, setAttribute, themes]
   );
   // Handles all our theme changes
-  const handleChange = useCallback(
+  const handleChange: (theme: string) => void = useCallback(
     (theme: string) => {
       if (theme === "system" && mediaQuery) {
         theme = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -124,53 +124,11 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
     [applyAttribute, darkTheme, lightTheme, mediaQuery, themes]
   );
 
-  const handleStorageEvent = useCallback(
-    (event: StorageEvent) => {
-      if (event.key === storageKey) {
-        handleChange(event.newValue || defaultTheme);
-      }
-    },
-    [defaultTheme, handleChange, storageKey]
-  );
-
   useEffect(() => {
-    window.addEventListener("storage", handleStorageEvent);
-    let theme = localStorage.getItem(storageKey);
-    if (theme === "system" || theme === null) {
-      if (mediaQuery) {
-        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? darkTheme
-          : lightTheme;
-      } else {
-        theme = defaultTheme;
-      }
-    }
-    setActiveTheme(theme);
-    return () => window.removeEventListener("storage", handleStorageEvent);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (activeTheme) handleTheme(activeTheme, themes, attribute);
-  }, [activeTheme, themes, attribute]);
-
-  // Listener for system theme changes
-  const mqlListener = useCallback(
-    (e) => {
-      handleChange(e.matches ? darkTheme : lightTheme);
-    },
-    [darkTheme, handleChange, lightTheme]
-  );
-
-  useEffect(() => {
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    if (mediaQuery) {
-      mql.addEventListener("change", mqlListener);
-    } else {
-      mql.removeEventListener("change", mqlListener);
-    }
-    return () => mql.removeEventListener("change", mqlListener);
-  }, [mediaQuery, mqlListener]);
+    storageProviders.forEach(
+      (item) => item.setListener && item.setListener(handleChange)
+    );
+  }, [handleChange, storageProviders]);
 
   const providerValue: UseThemeContext = React.useMemo(
     () => ({
@@ -189,7 +147,7 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
         defaultTheme={defaultTheme}
         lightTheme={lightTheme}
         mediaQuery={mediaQuery}
-        storageKey={storageKey}
+        storageProviders={storageProviders}
       />
       {children}
     </ThemeContext.Provider>

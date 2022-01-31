@@ -99,7 +99,7 @@ function ThemeButtons() {
  
 ## About The Project
 
-I built this project to make theme handling much easier and hassell free. It's amazing how hard it is to handle theme changes so I hope this project makes your life easier
+I built this project to make theme handling much easier and hassle free. It's amazing how hard it is to handle theme changes so I hope this project makes your life easier
 
 Features:
 * No horrible flash of incorrect theme (FOIT) 

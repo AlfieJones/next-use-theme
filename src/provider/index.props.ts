@@ -1,3 +1,6 @@
+import { ReactNode } from "react";
+import { StorageProviderType } from "./storage/storage.types";
+
 export interface ThemeProviderProps {
   /** Use media query to toggle the theme between light and dark */
   mediaQuery?: boolean;
@@ -7,16 +10,16 @@ export interface ThemeProviderProps {
   attribute?: `data-${string}` | "class";
   /** List of all available theme names, defaults to the two props [lightTheme, darkTheme], eg ["lightTheme", "darkTheme"] */
   themes?: string[];
-  /** Dark theme name, defaults to dark */
+  /** Dark theme name */
   darkTheme?: string;
-  /** Light theme name, defaults to light */
+  /** Light theme name */
   lightTheme?: string;
-  /** Key used to store theme setting in localStorage */
-  storageKey?: string;
-  /** Default theme, defaults to light */
+  /** Default theme */
   defaultTheme?: string;
+  /** Theme Providers */
+  storageProviders?: StorageProviderType[];
   /** The components children */
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 // This is the type for our context usage
