@@ -10,12 +10,16 @@ export const ThemeContext = React.createContext<UseThemeContext>({
 });
 
 // Recursively add our prover injections
-const setInject = (providers: Handler[], index: number = providers.length - 1): string =>
+const setInject = (
+  providers: Handler[],
+  index: number = providers.length - 1
+): string =>
   index === -1
     ? ""
-    : `try{${`e=${providers[index]?.codeInject}`}}finally{${setInject(providers, index - 1)}}`;
-
-
+    : `try{${`e=${providers[index]?.codeInject}`}}finally{${setInject(
+        providers,
+        index - 1
+      )}}`;
 
 const Provider: FC<ProviderProps> = ({
   mediaQuery = DefaultProps.mediaQuery,
@@ -29,17 +33,28 @@ const Provider: FC<ProviderProps> = ({
   onChange,
   children,
 }: ProviderProps) => {
-
   const getRespectedTheme = useCallback(() => {
-    for (const handler of storageHandlers) {
-      const theme = handler.getTheme();
-      if(theme && themes.includes(theme))
-        return theme;
-    }
-    if(mediaQuery)
-      return typeof window !== 'undefined' && window.matchMedia("(prefers-color-scheme: dark)").matches? darkTheme : lightTheme
-    return defaultTheme;
-  }, [storageHandlers, mediaQuery, darkTheme, lightTheme, themes]);
+    let theme;
+    storageHandlers.forEach((handler) => {
+      const tempTheme = handler.getTheme();
+      if (tempTheme && themes.includes(tempTheme)) theme = tempTheme;
+    });
+
+    if (!theme && typeof window !== "undefined" && mediaQuery)
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? darkTheme
+        : lightTheme;
+    else theme = defaultTheme;
+
+    return theme;
+  }, [
+    storageHandlers,
+    mediaQuery,
+    darkTheme,
+    lightTheme,
+    defaultTheme,
+    themes,
+  ]);
 
   const [activeTheme, setActiveTheme] = useState<string>(getRespectedTheme());
 
@@ -66,16 +81,24 @@ const Provider: FC<ProviderProps> = ({
     (theme: string | null) => {
       if (respectHandlerOrder) {
         setActiveTheme(getRespectedTheme());
-      } else if(theme && themes.includes(theme)) {
+      } else if (theme && themes.includes(theme)) {
         setActiveTheme(theme);
       } else {
         setActiveTheme(defaultTheme);
       }
     },
-    [defaultTheme, themes, respectHandlerOrder, getRespectedTheme, setActiveTheme]
+    [
+      defaultTheme,
+      themes,
+      respectHandlerOrder,
+      getRespectedTheme,
+      setActiveTheme,
+    ]
   );
 
-  storageHandlers.forEach((handler) => handler.setListener(handleProviderChange));
+  storageHandlers.forEach((handler) =>
+    handler.setListener(handleProviderChange)
+  );
 
   // Handle theme changing
   useEffect(() => {
@@ -125,8 +148,9 @@ const Provider: FC<ProviderProps> = ({
         <script
           dangerouslySetInnerHTML={{
             __html: `!function(){var e${
-              mediaQuery ? `=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}";` :
-              `;`
+              mediaQuery
+                ? `=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}";`
+                : `;`
             }${handleInject}e||(e="${defaultTheme}");${setAttr}}();`,
           }}
         />
