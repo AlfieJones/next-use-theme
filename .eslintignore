@@ -2,3 +2,4 @@ rollup.config.js
 node_modules
 dist
 example
+.log

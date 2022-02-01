@@ -1,19 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ESNEXT",
-    "module": "ESNEXT",
-    "lib": ["dom", "ESNEXT"],
-    "sourceMap": true,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "rootDir": "src",
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
+    "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
-    "strictNullChecks": true,
-    "esModuleInterop": true,
     "declaration": true,
+    "target": "es6",
+    "jsx": "react",
+    "allowJs": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
-  "include":["src"],
-  "exclude": ["example", "dist", "node_modules"]
+  "include": ["./src/**/*.ts"],
 }

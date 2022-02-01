@@ -19,8 +19,7 @@
   ],
   "scripts": {
     "test": "jest",
-    "build": "microbundle --jsx React.createElement",
-    "dev": "microbundle --jsx React.createElement watch"
+    "build": "tsc"
   },
   "peerDependencies": {
     "next": "*",
@@ -49,7 +48,6 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "^27.4.7",
-    "microbundle": "^0.14.2",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
     "typescript": "^4.3.5"
