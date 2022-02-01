@@ -1,8 +1,8 @@
 
 node_modules
-src
+./src
 .vscode
 .eslintrc.json
-example
+./example
 tsconfig.json
 .prettierignore

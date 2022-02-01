@@ -1,2 +1,4 @@
-export { default } from "./useTheme/index";
-export { default as ThemeProvider } from "./provider/index";
+export { default as ThemeProvider } from "./provider";
+export * from "./provider";
+export { default } from "./useTheme";
+export * from "./useTheme";
