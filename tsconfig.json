@@ -15,5 +15,5 @@
     "declaration": true,
   },
   "include":["src"],
-  "exclude": ["example", "dist", "node_modules", "rollup.config.js"]
+  "exclude": ["example", "dist", "node_modules"]
 }
