@@ -42,6 +42,8 @@ export type UseThemeContext = {
   themes: string[];
   /** The function to call when we want to change the theme */
   handleChange: (theme: string) => void;
-  /** The current theme value */
+  /** The current theme value, if system then returns light/dark */
   value: string;
+  /** The current theme value including if system is set */
+  resolvedTheme: string;
 };

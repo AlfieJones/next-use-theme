@@ -4,10 +4,11 @@ import { HandlerConfig, Handler, defaultConfig } from "./handler.types";
 const codeInject = (key: string) => `sessionStorage.getItem('${key}');`;
 
 const handleChange = (key: string) => (theme: string) => {
-  localStorage.setItem(key, theme);
+  if (typeof window !== "undefined") sessionStorage.setItem(key, theme);
 };
 
-const getTheme = (key: string) => () => localStorage.getItem(key);
+const getTheme = (key: string) => () =>
+  typeof window !== "undefined" ? sessionStorage.getItem(key) : null;
 
 const setListener = (key: string) => (fn: (theme: string | null) => void) => {
   useEffect(() => {

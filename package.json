@@ -26,6 +26,12 @@
     "react": "*",
     "react-dom": "*"
   },
+  "jest": {
+    "resetMocks": false,
+    "setupFiles": [
+      "jest-localstorage-mock"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.16.11",
@@ -48,6 +54,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "^27.4.7",
+    "jest-localstorage-mock": "^2.4.18",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
     "typescript": "^4.3.5"

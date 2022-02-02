@@ -2,10 +2,12 @@ import React, { useEffect, FC, useCallback, useState, useMemo } from "react";
 import Head from "next/head";
 import { UseThemeContext, DefaultProps, ProviderProps } from "./provider.props";
 import { Handler } from "./handler";
+import useDarkMediaQuery from "../utils/useMediaQuery";
 
 export const ThemeContext = React.createContext<UseThemeContext>({
   themes: DefaultProps.themes,
   value: DefaultProps.defaultTheme,
+  resolvedTheme: DefaultProps.defaultTheme,
   handleChange: () => {},
 });
 
@@ -56,26 +58,35 @@ const Provider: FC<ProviderProps> = ({
     themes,
   ]);
 
+  const [resolvedTheme, setResolvedTheme] = useState<string>(
+    getRespectedTheme()
+  );
   const [activeTheme, setActiveTheme] = useState<string>(getRespectedTheme());
+
+  const matches = useDarkMediaQuery();
 
   // Handles our theme changes
   const handleChange: (theme: string) => void = useCallback(
     (theme: string) => {
       if (theme === "system" && mediaQuery) {
-        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? darkTheme
-          : lightTheme;
-      }
-      if (themes.includes(theme)) {
+        setResolvedTheme("system");
+        setActiveTheme(matches ? darkTheme : lightTheme);
+      } else if (themes.includes(theme)) {
         setActiveTheme(theme);
+        setResolvedTheme(theme);
       } else {
         throw new Error(
           `Unknown theme: ${theme}. Have you included it in the themes prop?`
         );
       }
     },
-    [darkTheme, lightTheme, mediaQuery, themes]
+    [darkTheme, lightTheme, matches, mediaQuery, themes]
   );
+
+  useEffect(() => {
+    if (mediaQuery) handleChange(matches ? darkTheme : lightTheme);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matches]);
 
   const handleProviderChange = useCallback(
     (theme: string | null) => {
@@ -123,9 +134,10 @@ const Provider: FC<ProviderProps> = ({
     () => ({
       themes,
       handleChange,
-      value: activeTheme || defaultTheme,
+      value: activeTheme,
+      resolvedTheme,
     }),
-    [activeTheme, defaultTheme, handleChange, themes]
+    [activeTheme, handleChange, resolvedTheme, themes]
   );
 
   // The attribute we're editing

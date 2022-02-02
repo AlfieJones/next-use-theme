@@ -8,8 +8,8 @@
     "allowJs": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "rootDir": "./src",
+    "rootDirs": ["./src", "./__test__"],
     "outDir": "./dist"
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*", "./__test__**/*"],
 }
