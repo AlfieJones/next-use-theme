@@ -10,9 +10,7 @@ type ChangeThemeProps = {
 export const ChangeTheme = ({ newTheme }: ChangeThemeProps) => {
   const { setTheme, theme } = useTheme();
 
-  useEffect(() => {
-    setTheme(newTheme);
-  }, [newTheme, setTheme]);
+  setTheme(newTheme);
 
   return (
     <>

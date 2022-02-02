@@ -3,11 +3,12 @@ import { useTheme } from "../../src";
 
 // A basic component which displays the current theme
 export const Basic = () => {
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
 
   return (
     <>
       <p data-testid="theme">{theme}</p>
+      <p data-testid="trueTheme">{resolvedTheme}</p>
     </>
   );
 };
