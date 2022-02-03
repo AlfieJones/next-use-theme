@@ -7,8 +7,8 @@ export const Basic = () => {
 
   return (
     <>
-      <p data-testid="theme">{theme}</p>
-      <p data-testid="trueTheme">{resolvedTheme}</p>
+      <p data-testid="basic-theme">{theme}</p>
+      <p data-testid="basic-trueTheme">{resolvedTheme}</p>
     </>
   );
 };

@@ -10,12 +10,14 @@ type ChangeThemeProps = {
 export const ChangeTheme = ({ newTheme }: ChangeThemeProps) => {
   const { setTheme, theme } = useTheme();
 
-  setTheme(newTheme);
+  useEffect(() => {
+    setTheme(newTheme);
+  }, [newTheme, setTheme]);
 
   return (
     <>
-      <p data-testid="theme">{theme}</p>
-      <p data-testid="newTheme">{newTheme}</p>
+      <p data-testid="changeTheme-theme">{theme}</p>
+      <p data-testid="changeTheme-newTheme">{newTheme}</p>
     </>
   );
 };

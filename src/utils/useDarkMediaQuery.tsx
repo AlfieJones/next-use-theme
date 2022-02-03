@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import isBrowser from "./isBrowser";
 
 const useDarkMediaQuery = () => {
-  const [matches, setMatches] = useState(false);
+  let mql: MediaQueryList | undefined;
+  if (isBrowser) mql = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const [matches, setMatches] = useState(mql.matches);
 
   useEffect(() => {
-    let mql: MediaQueryList | undefined;
-
-    if (isBrowser) mql = window.matchMedia("(prefers-color-scheme: dark)");
-
     if (mql) {
       setMatches(mql.matches);
       mql.addEventListener("change", () => setMatches(mql.matches));
@@ -17,7 +16,7 @@ const useDarkMediaQuery = () => {
     return (
       mql && mql.removeEventListener("change", () => setMatches(mql.matches))
     );
-  }, []);
+  }, [mql]);
 
   return matches;
 };

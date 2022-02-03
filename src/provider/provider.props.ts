@@ -32,7 +32,7 @@ export type ProviderProps = {
   /** Themes for the toggle to loop through */
   toggleThemes?: string[];
   /** Handle the theme change yourself. Setting this disables next-theme from setting the attribute */
-  onChange?: (theme: string) => {};
+  onChange?: (theme: string, resolvedTheme: string) => {};
   /** The components children */
   children?: ReactNode;
 };

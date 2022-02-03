@@ -4,7 +4,7 @@ import { ThemeProvider } from "../src";
 import { localStorageMock } from "./__mocks__";
 import { Basic, ChangeTheme } from "./components";
 
-describe("Default theme test-suite", () => {
+describe("LocalStorage test-suite", () => {
   beforeAll(() => {
     // Create a mock of the window.matchMedia function
     // Based on: https://stackoverflow.com/questions/39830580/jest-test-fails-typeerror-window-matchmedia-is-not-a-function
@@ -14,8 +14,6 @@ describe("Default theme test-suite", () => {
         matches: false,
         media: query,
         onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
@@ -27,6 +25,10 @@ describe("Default theme test-suite", () => {
     });
   });
 
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   test("Should return system when no default-theme is set", () => {
     render(
       <ThemeProvider>
@@ -34,8 +36,27 @@ describe("Default theme test-suite", () => {
       </ThemeProvider>
     );
 
-    expect(screen.getByTestId("newTheme").textContent).toBe("dark");
+    expect(screen.getByTestId("changeTheme-newTheme").textContent).toBe("dark");
+    expect(screen.getByTestId("changeTheme-theme").textContent).toBe("dark");
 
-    expect(screen.getByTestId("theme").textContent).toBe("dark");
+    render(
+      <ThemeProvider>
+        <Basic />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("basic-theme").textContent).toBe("dark");
+    expect(screen.getByTestId("basic-trueTheme").textContent).toBe("dark");
+  });
+
+  test("Should return system when no default-theme is set", () => {
+    render(
+      <ThemeProvider>
+        <Basic />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("basic-theme").textContent).toBe("light");
+    expect(screen.getByTestId("basic-trueTheme").textContent).toBe("system");
   });
 });
