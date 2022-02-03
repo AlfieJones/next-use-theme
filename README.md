@@ -1,13 +1,13 @@
 <div align="center">
-    <img alt="NPM version" src="https://img.shields.io/npm/v/next-theme?style=for-the-badge">
-    <img alt="NPM downloads" src="https://img.shields.io/npm/dm/next-theme?style=for-the-badge">
-    <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/alfieJones/next-theme?style=for-the-badge">
+    <img alt="NPM version" src="https://img.shields.io/npm/v/next-use-theme?style=for-the-badge">
+    <img alt="NPM downloads" src="https://img.shields.io/npm/dm/next-use-theme?style=for-the-badge">
+    <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/alfieJones/next-use-theme?style=for-the-badge">
 </div>
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <h1 align="center">Next Theme</h1>
+  <h1 align="center">Next Use Theme</h1>
 
   <p align="center">
     A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded flash of incorrect theme

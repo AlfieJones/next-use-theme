@@ -3,13 +3,15 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "declaration": true,
-    "target": "es6",
+    "module": "ESNext",
+    "target": "ESNext",
     "jsx": "react",
     "allowJs": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "rootDirs": ["./src", "./__test__"],
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
-  "include": ["./src/**/*", "./__test__**/*"],
+  "include": ["./src/**/*"],
+  "exclude": ["./__test__**/*"],
 }

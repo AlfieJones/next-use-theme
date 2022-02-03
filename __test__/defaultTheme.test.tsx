@@ -6,23 +6,7 @@ import { ThemeProvider } from "../src";
 
 describe("Default theme test-suite", () => {
   beforeAll(() => {
-    // Create a mock of the window.matchMedia function
-    // Based on: https://stackoverflow.com/questions/39830580/jest-test-fails-typeerror-window-matchmedia-is-not-a-function
-    Object.defineProperty(window, "matchMedia", {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
-    });
-
-    Object.defineProperty(window, "localStorage", {
-      value: localStorageMock(),
-    });
+    localStorageMock();
   });
 
   beforeEach(() => {

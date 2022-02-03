@@ -9,7 +9,7 @@ export const mockSystemMedia = () => {
   }));
 };
 
-export const localStorageMock = () => {
+const localStorageInternal = () => {
   let store: { [key: string]: string } = {};
   return {
     getItem(key: string) {
@@ -23,3 +23,8 @@ export const localStorageMock = () => {
     },
   };
 };
+
+export const localStorageMock = () =>
+  Object.defineProperty(window, "localStorage", {
+    value: localStorageInternal(),
+  });
