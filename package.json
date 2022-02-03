@@ -1,25 +1,29 @@
 {
-  "name": "next-theme",
-  "version": "1.0.0",
+  "name": "next-use-theme",
+  "version": "1.0.1",
   "description": "A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded Flash of incorrect theme",
   "license": "MIT",
   "repository": "https://github.com/AlfieJones/next-theme",
   "author": {
     "name": "Alfie Jones",
-    "url": "https://alfie-jones.com"
+    "url": "https://ajones.uk"
   },
-  "type": "module",
   "source": "src/index.ts",
-  "exports": "./dist/index.modern.js",
-  "module": "dist/index.js",
   "main": "dist/index.cjs",
-  "types": "./dist/index.d.ts",
+  "module": "dist/index.module.js",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.modern.js"
+  },
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "sideEffects": false,
   "scripts": {
     "test": "jest --env=jsdom",
-    "build": "tsc"
+    "build": "microbundle",
+    "dev": "microbundle watch"
   },
   "peerDependencies": {
     "next": "*",
@@ -37,6 +41,9 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@types/next": "^9.0.0",
@@ -56,9 +63,15 @@
     "jest": "^27.4.7",
     "jest-localstorage-mock": "^2.4.18",
     "jsdom": "^19.0.0",
+    "microbundle": "^0.14.2",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "rollup": "^2.53.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {}
