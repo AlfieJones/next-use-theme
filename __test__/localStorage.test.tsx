@@ -49,7 +49,36 @@ describe("LocalStorage test-suite", () => {
     expect(screen.getByTestId("basic-trueTheme").textContent).toBe("dark");
   });
 
-  test("Should return system when no default-theme is set", () => {
+  test("Checking tech theme is stored into local storage and read", () => {
+    render(
+      <ThemeProvider themes={["tech"]}>
+        <ChangeTheme newTheme="tech" />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("changeTheme-newTheme").textContent).toBe("tech");
+    expect(screen.getByTestId("changeTheme-theme").textContent).toBe("tech");
+
+    render(
+      <ThemeProvider themes={["tech"]}>
+        <Basic />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("basic-theme").textContent).toBe("tech");
+    expect(screen.getByTestId("basic-trueTheme").textContent).toBe("tech");
+  });
+
+  test("Checking only listed themes are read", () => {
+    render(
+      <ThemeProvider themes={["tech"]}>
+        <ChangeTheme newTheme="tech" />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("changeTheme-newTheme").textContent).toBe("tech");
+    expect(screen.getByTestId("changeTheme-theme").textContent).toBe("tech");
+
     render(
       <ThemeProvider>
         <Basic />
