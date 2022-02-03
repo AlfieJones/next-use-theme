@@ -16,9 +16,11 @@ export type Handler = {
   /** Code to be injected on page load */
   codeInject: string;
   /** Called when the theme changes */
-  onChange: (theme: string) => void;
+  onChange: (theme: string, type: HandlerTypes) => void;
   /** Returns the theme stored */
   getTheme: () => string | null;
   /** Sets the listener function */
-  setListener: (fn: (theme: string | null) => void) => void;
+  setListener: (fn: (theme: string | null, type: HandlerTypes) => void) => void;
 };
+
+export type HandlerTypes = "localStorage" | "sessionStorage" | "cookie" | "url";

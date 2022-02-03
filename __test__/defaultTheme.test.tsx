@@ -1,12 +1,25 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import { localStorageMock } from "./__mocks__";
+import { localStorageMock, systemMediaMock } from "./__mocks__";
 import { Basic } from "./components";
 import { ThemeProvider } from "../src";
 
 describe("Default theme test-suite", () => {
   beforeAll(() => {
     localStorageMock();
+        // Create a mock of the window.matchMedia function
+    // Based on: https://stackoverflow.com/questions/39830580/jest-test-fails-typeerror-window-matchmedia-is-not-a-function
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
   });
 
   beforeEach(() => {

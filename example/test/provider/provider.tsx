@@ -86,11 +86,11 @@ const Provider: FC<ProviderProps> = ({
   );
 
 
-    const setThemeState = (theme: string, triggerType?: HandlerTypes) => {
-      var resolvedTheme = null;
-      if(theme === "system")
-        resolvedTheme = matches? darkTheme : lightTheme;
-      setThemeStateInternal({ theme, resolvedTheme, triggerType });
+    const setThemeState = (newTheme: string, triggerType?: HandlerTypes) => {
+      var theme = newTheme;
+      if(newTheme === "system")
+        theme = matches? darkTheme : lightTheme;
+      setThemeStateInternal({ theme, resolvedTheme: newTheme, triggerType });
     }
 
 

@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { Handler, localStorage } from "./handler";
+import { HandlerTypes } from "./handler/handler.types";
 
 export const DefaultProps = {
   mediaQuery: true,
@@ -10,6 +11,12 @@ export const DefaultProps = {
   storageHandlers: [localStorage()],
   respectHandlerOrder: false,
 };
+
+export type ThemeState = {
+  theme: string | null;
+  resolvedTheme: string | null;
+  triggerType?: HandlerTypes;
+}
 
 // TODO improve typings
 export type ProviderProps = {

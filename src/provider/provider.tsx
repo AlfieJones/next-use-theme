@@ -1,8 +1,14 @@
 import React, { useEffect, FC, useCallback, useState, useMemo } from "react";
 import Head from "next/head";
-import { UseThemeContext, DefaultProps, ProviderProps } from "./provider.props";
+import {
+  UseThemeContext,
+  DefaultProps,
+  ProviderProps,
+  ThemeState,
+} from "./provider.types";
 import { Handler } from "./handler";
 import { isBrowser, useDarkMediaQuery, useIsMounted } from "../utils";
+import { HandlerTypes } from "./handler/handler.types";
 
 export const ThemeContext = React.createContext<UseThemeContext>({
   themes: [DefaultProps.lightTheme, DefaultProps.darkTheme],
@@ -52,7 +58,7 @@ const Provider: FC<ProviderProps> = ({
   const mounted = useIsMounted();
 
   // Gets the theme with respect to our handlers
-  const getRespectedTheme = useCallback(() => {
+  const getRespectedTheme = useCallback((): ThemeState => {
     let theme;
     storageHandlers.forEach((handler) => {
       const tempTheme = handler.getTheme();
@@ -72,72 +78,60 @@ const Provider: FC<ProviderProps> = ({
       }
     }
 
-    return theme;
-  }, [storageHandlers, defaultTheme, themes]);
+    let resolvedTheme = null;
+    if (theme === "system") resolvedTheme = matches ? darkTheme : lightTheme;
+    return { theme, resolvedTheme };
+  }, [storageHandlers, matches, darkTheme, lightTheme, themes, defaultTheme]);
 
-  const getActive = (theme: string | null) => {
-    if (theme === "system") {
-      return matches ? darkTheme : lightTheme;
-    }
-    return theme;
-  };
-
-  const [resolvedTheme, setResolvedTheme] = useState<string | null>(
-    getRespectedTheme()
-  );
-  const [activeTheme, setActiveTheme] = useState<string | null>(
-    getActive(resolvedTheme)
-  );
+  const [themeState, setThemeState] = useState<ThemeState>(getRespectedTheme());
 
   // Handles our theme changes
-  const handleChange: (theme: string) => void = useCallback(
-    (theme: string) => {
-      if (theme === "system") {
-        setResolvedTheme("system");
-        setActiveTheme(matches ? darkTheme : lightTheme);
-      } else if (themes.includes(theme)) {
-        setActiveTheme(theme);
-        setResolvedTheme(theme);
-      } else {
+  const handleChange = useCallback(
+    (newTheme: string, triggerType?: HandlerTypes) => {
+      let theme = newTheme;
+      let resolvedTheme = newTheme;
+      if (!themes.includes(newTheme)) {
         console.error(
           `Unknown theme: ${theme}. Have you included it in the themes prop?`
         );
-        // We default to system theme if no previous theme is active
-        if (resolvedTheme === null) {
-          setResolvedTheme("system");
-          setActiveTheme(matches ? darkTheme : lightTheme);
-        }
+        if (themeState.resolvedTheme === null) resolvedTheme = defaultTheme;
       }
+
+      if (resolvedTheme === "system") theme = matches ? darkTheme : lightTheme;
+
+      setThemeState({ theme, resolvedTheme, triggerType });
     },
-    [darkTheme, lightTheme, matches, resolvedTheme, themes]
+    [
+      darkTheme,
+      defaultTheme,
+      lightTheme,
+      matches,
+      themeState.resolvedTheme,
+      themes,
+    ]
   );
 
   // Watch for system theme changes
   useEffect(() => {
     if (mediaQuery && mounted) {
-      if (resolvedTheme === "system") handleChange("system");
+      if (themeState.resolvedTheme === "system") handleChange("system");
       else handleChange(matches ? darkTheme : lightTheme);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matches, mounted]);
 
   const handleProviderChange = useCallback(
-    (theme: string | null) => {
+    (theme: string | null, type: HandlerTypes) => {
       if (respectHandlerOrder) {
-        setActiveTheme(getRespectedTheme());
-      } else if (theme && themes.includes(theme)) {
-        setActiveTheme(theme);
-      } else {
-        setActiveTheme(defaultTheme);
+        const respected = getRespectedTheme();
+        if (respected.resolvedTheme)
+          handleChange(respected.resolvedTheme, type);
+        else handleChange("system");
+      } else if (theme) {
+        handleChange(theme, type);
       }
     },
-    [
-      defaultTheme,
-      themes,
-      respectHandlerOrder,
-      getRespectedTheme,
-      setActiveTheme,
-    ]
+    [respectHandlerOrder, getRespectedTheme, handleChange]
   );
 
   storageHandlers.forEach((handler) =>
@@ -146,40 +140,33 @@ const Provider: FC<ProviderProps> = ({
 
   // Handle theme changing
   useEffect(() => {
-    if (resolvedTheme && activeTheme) {
+    if (themeState.resolvedTheme && themeState.theme) {
       storageHandlers.forEach((handler) => {
-        handler.onChange(resolvedTheme);
+        handler.onChange(themeState.resolvedTheme, themeState.triggerType);
       });
       if (onChange) {
-        onChange(activeTheme, resolvedTheme);
+        onChange(themeState.resolvedTheme, themeState.resolvedTheme);
       } else {
         const root = document.documentElement;
         if (attribute === "class") {
           root.classList.remove(...themes);
-          root.classList.add(activeTheme);
+          root.classList.add(themeState.theme);
         } else {
-          root.setAttribute(attribute, activeTheme);
+          root.setAttribute(attribute, themeState.theme);
         }
       }
     }
-  }, [
-    activeTheme,
-    attribute,
-    onChange,
-    resolvedTheme,
-    storageHandlers,
-    themes,
-  ]);
+  }, [attribute, onChange, themeState, storageHandlers, themes]);
 
   // Context for our hook
   const providerValue: UseThemeContext = useMemo(
     () => ({
       themes,
       handleChange,
-      value: activeTheme,
-      resolvedTheme,
+      value: themeState.theme,
+      resolvedTheme: themeState.resolvedTheme,
     }),
-    [activeTheme, handleChange, resolvedTheme, themes]
+    [handleChange, themeState.resolvedTheme, themeState.theme, themes]
   );
 
   // The attribute we're editing

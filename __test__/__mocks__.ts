@@ -1,13 +1,14 @@
 /* eslint-disable import/prefer-default-export */
-export const mockSystemMedia = () => {
-  global.window.matchMedia = jest.fn().mockImplementation((query) => ({
+export const systemMediaMock = () => 
+  Object.defineProperty(window, "matchMedia", jest.fn().mockImplementation((query) => ({
     matches: query === "(prefers-color-scheme: dark)",
-    media: "",
     onchange: null,
     addListener: jest.fn(),
     removeListener: jest.fn(),
-  }));
-};
+  })
+  )
+
+);
 
 const localStorageInternal = () => {
   let store: { [key: string]: string } = {};
