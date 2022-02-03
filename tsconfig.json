@@ -13,5 +13,4 @@
     "outDir": "./dist",
   },
   "include": ["./src/**/*"],
-  "exclude": ["./__test__**/*"],
 }
