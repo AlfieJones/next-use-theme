@@ -1,9 +1,13 @@
 import React from "react";
 import Head from "next/head";
-import useTheme from "next-theme";
+import { useTheme } from "next-use-theme";
+
+// Note: This example isn't hydration safe and will cause a hydration mismatch error.
+// To avoid this issue consider only rendering UI which uses the theme the client
 
 export default function Home() {
   const { toggle, setTheme, theme } = useTheme();
+
   return (
     <div className="container">
       <Head>
@@ -31,6 +35,9 @@ export default function Home() {
         <div className="setters">
           <button type="button" onClick={() => setTheme("light")}>
             Light theme
+          </button>
+          <button type="button" onClick={() => setTheme("tech")}>
+            Tech theme
           </button>
           <button type="button" onClick={() => setTheme("dark")}>
             Dark theme
