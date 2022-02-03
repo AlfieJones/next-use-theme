@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import isBrowser from "../../utils/isBrowser";
 import { HandlerConfig, Handler, defaultConfig } from "./handler.types";
 
-const codeInject = (key: string) => `localStorage.getItem('${key}');`;
+const codeInject = (key: string) => `localStorage.getItem('${key}')`;
 
 const handleChange = (key: string) => (theme: string) => {
   if (isBrowser) localStorage.setItem(key, theme);
