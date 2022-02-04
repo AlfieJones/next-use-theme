@@ -20,7 +20,6 @@ const setListener =
       const listener = (e: StorageEvent) => {
         if (e.key === key && e.oldValue !== e.newValue) {
           fn(e.newValue, "localStorage");
-          console.log(e);
         }
       };
 

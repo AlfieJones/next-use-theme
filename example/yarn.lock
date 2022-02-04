@@ -843,12 +843,12 @@ nanoid@^3.1.30:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.2.0.tgz#62667522da6673971cca916a6d3eff3f415ff80c"
   integrity sha512-fmsZYa9lpn69Ad5eDn7FMcnnSR+8R34W9qJEijxYhTbfOWzr22n1QxCMzXLK+ODyW2973V3Fux959iQoUxzUIA==
 
-next-use-theme@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/next-use-theme/-/next-use-theme-1.1.0.tgz#22c6149d17efa0da9c030d9fffafcfaed5c4957b"
-  integrity sha512-V+S07nKW6g/Dt6bU3QzJZQ+D3KmvTElt606ZOviIKU+Q9t1zBgSr+sNbJmwDleiZdSpdjfcS7/WXbQgakwkIoA==
+next-use-theme@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/next-use-theme/-/next-use-theme-1.1.1.tgz#9a3fd8f9b968fc8b6a25d95bbd8425a4f12db151"
+  integrity sha512-D16T3Omi6Nl8RQsaPKTZ2SJru2kX1Y+5EgFl3R8mhG5NDkMp44eS3JqNuOnQtNbggXIQpFYXDXkeEYXgmbcjiA==
 
-next@12:
+next@^12.0.10:
   version "12.0.10"
   resolved "https://registry.yarnpkg.com/next/-/next-12.0.10.tgz#fcc4584177418bd777ce157f3165b7ba5e7708f7"
   integrity sha512-1y3PpGzpb/EZzz1jgne+JfZXKAVJUjYXwxzrADf/LWN+8yi9o79vMLXpW3mevvCHkEF2sBnIdjzNn16TJrINUw==
