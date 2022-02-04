@@ -211,10 +211,8 @@ const Provider: FC<ProviderProps> = ({
         <script
           dangerouslySetInnerHTML={{
             __html: `!function(){var e;${handleInject}${
-              mediaQuery
-                ? `e||(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");`
-                : `e||(e="${defaultTheme}");e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");`
-            }${setAttr}}();`,
+              mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
+            }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${setAttr}}();`,
           }}
         />
       </Head>
