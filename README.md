@@ -8,6 +8,7 @@
 <br />
 <p align="center">
   <h1 align="center">Next Use Theme</h1>
+  <h2 align="center">Extremely lightweight, Highly customizable</h2>
 
   <p align="center">
     A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded flash of incorrect theme
