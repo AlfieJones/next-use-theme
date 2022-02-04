@@ -73,7 +73,7 @@ Then we you can use our hook useTheme() to access and change the current theme
 
 ```JS
 // Example hook usage
-import useTheme from "next-theme";
+import { useTheme } from "next-theme";
 
 function ThemeButtons() {
   const { setTheme, toggle, theme } = useTheme();
