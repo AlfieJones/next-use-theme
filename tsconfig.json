@@ -1,16 +1,4 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "declaration": true,
-    "module": "ESNext",
-    "target": "ESNext",
-    "jsx": "react",
-    "allowJs": false,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "rootDirs": ["./src", "./__test__"],
-    "outDir": "./dist",
-  },
-  "include": ["./src/**/*"],
+  "extends": "./configs/base",
+  "include": ["./src/**/*", "./__test__/**/*"]
 }

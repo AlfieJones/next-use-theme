@@ -4,12 +4,12 @@ export const defaultConfig = {
 };
 
 // This is the type for our storage providers
-export type HandlerConfig = typeof defaultConfig & {
+export type HandlerConfig = {
   /** The key for storing */
   key?: string;
   /** Should the provider change it's store to reflect the current value */
   storeUpdates?: boolean;
-};
+} | null;
 
 // This is the type for our storage providers
 export type Handler = {

@@ -1,57 +1,25 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import { ThemeProvider } from "../src";
-import { localStorageMock } from "./__mocks__";
+import { ThemeProvider, sessionStorage } from "../src";
+import { sessionStorageMock, systemMediaMock } from "./__mocks__";
 import { Basic, ChangeTheme } from "./components";
 
 describe("LocalStorage test-suite", () => {
   beforeAll(() => {
-    // Create a mock of the window.matchMedia function
-    // Based on: https://stackoverflow.com/questions/39830580/jest-test-fails-typeerror-window-matchmedia-is-not-a-function
-    Object.defineProperty(window, "matchMedia", {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
-    });
-
-    Object.defineProperty(window, "sessionStorage", {
-      value: localStorageMock(),
-    });
+    systemMediaMock();
+    sessionStorageMock();
   });
 
   beforeEach(() => {
-    window.localStorage.clear();
+    window.sessionStorage.clear();
   });
 
-  test("Should return system when no default-theme is set", () => {
+  test("Tests session storage works with key", () => {
     render(
-      <ThemeProvider>
-        <ChangeTheme newTheme="dark" />
-      </ThemeProvider>
-    );
-
-    expect(screen.getByTestId("changeTheme-newTheme").textContent).toBe("dark");
-    expect(screen.getByTestId("changeTheme-theme").textContent).toBe("dark");
-
-    render(
-      <ThemeProvider>
-        <Basic />
-      </ThemeProvider>
-    );
-
-    expect(screen.getByTestId("basic-theme").textContent).toBe("dark");
-    expect(screen.getByTestId("basic-trueTheme").textContent).toBe("dark");
-  });
-
-  test("Checking tech theme is stored into local storage and read", () => {
-    render(
-      <ThemeProvider themes={["tech"]}>
+      <ThemeProvider
+        themes={["tech", "dark", "light"]}
+        storageHandlers={[sessionStorage({ key: "test" })]}
+      >
         <ChangeTheme newTheme="tech" />
       </ThemeProvider>
     );
@@ -60,7 +28,30 @@ describe("LocalStorage test-suite", () => {
     expect(screen.getByTestId("changeTheme-theme").textContent).toBe("tech");
 
     render(
-      <ThemeProvider themes={["tech"]}>
+      <ThemeProvider
+        themes={["tech", "dark", "light"]}
+        storageHandlers={[sessionStorage({ key: "test" })]}
+      >
+        <Basic />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("basic-theme").textContent).toBe("tech");
+    expect(screen.getByTestId("basic-trueTheme").textContent).toBe("tech");
+  });
+
+  test("Checking tech theme is stored into local storage and read", () => {
+    render(
+      <ThemeProvider themes={["tech"]} storageHandlers={[sessionStorage()]}>
+        <ChangeTheme newTheme="tech" />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId("changeTheme-newTheme").textContent).toBe("tech");
+    expect(screen.getByTestId("changeTheme-theme").textContent).toBe("tech");
+
+    render(
+      <ThemeProvider themes={["tech"]} storageHandlers={[sessionStorage()]}>
         <Basic />
       </ThemeProvider>
     );
@@ -71,7 +62,7 @@ describe("LocalStorage test-suite", () => {
 
   test("Checking only listed themes are read", () => {
     render(
-      <ThemeProvider themes={["tech"]}>
+      <ThemeProvider themes={["tech"]} storageHandlers={[sessionStorage()]}>
         <ChangeTheme newTheme="tech" />
       </ThemeProvider>
     );
@@ -80,7 +71,7 @@ describe("LocalStorage test-suite", () => {
     expect(screen.getByTestId("changeTheme-theme").textContent).toBe("tech");
 
     render(
-      <ThemeProvider>
+      <ThemeProvider storageHandlers={[sessionStorage()]}>
         <Basic />
       </ThemeProvider>
     );

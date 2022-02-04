@@ -1,6 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import { useTheme } from "../test";
+import { useTheme } from "next-use-theme";
 
 // Note: This example isn't hydration safe and will cause a hydration mismatch error.
 // To avoid this issue consider only rendering UI which uses the theme the client

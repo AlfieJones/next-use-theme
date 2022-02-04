@@ -16,7 +16,7 @@ export type ThemeState = {
   theme: string | null;
   resolvedTheme: string | null;
   triggerType?: HandlerTypes;
-}
+};
 
 // TODO improve typings
 export type ProviderProps = {
@@ -47,11 +47,11 @@ export type ProviderProps = {
 // This is the type for our context usage
 export type UseThemeContext = {
   /** List of all available theme names, defaults to the two props [lightTheme, darkTheme], eg ["lightTheme", "darkTheme"] */
-  themes: string[];
+  themes: string[] | null;
   /** The function to call when we want to change the theme */
   handleChange: (theme: string) => void;
   /** The current theme value, if system then returns light/dark */
-  value: string;
+  value: string | null;
   /** The current theme value including if system is set */
-  resolvedTheme: string;
+  resolvedTheme: string | null;
 };

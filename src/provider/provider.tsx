@@ -11,9 +11,9 @@ import { isBrowser, useDarkMediaQuery, useIsMounted } from "../utils";
 import { HandlerTypes } from "./handler/handler.types";
 
 export const ThemeContext = React.createContext<UseThemeContext>({
-  themes: [DefaultProps.lightTheme, DefaultProps.darkTheme],
-  value: DefaultProps.defaultTheme,
-  resolvedTheme: DefaultProps.defaultTheme,
+  themes: [],
+  value: null,
+  resolvedTheme: null,
   handleChange: () => {},
 });
 
@@ -38,48 +38,70 @@ const setInject = (providers: Handler[], index: number = 0): string => {
 const Provider: FC<ProviderProps> = ({
   mediaQuery = DefaultProps.mediaQuery,
   attribute = DefaultProps.attribute,
-  themes,
+  themes: mThemes,
   darkTheme = DefaultProps.darkTheme,
   lightTheme = DefaultProps.lightTheme,
   defaultTheme = DefaultProps.defaultTheme,
   storageHandlers = DefaultProps.storageHandlers,
   respectHandlerOrder = DefaultProps.respectHandlerOrder,
-  toggleThemes,
+  toggleThemes: mToggleThemes,
   onChange,
   children,
 }: ProviderProps) => {
   // Set out default props
-  if (!themes) themes = [lightTheme, darkTheme];
-  if (!toggleThemes) toggleThemes = themes;
-  themes.push("system");
+  const mounted = useIsMounted();
+
+  const [themes, setThemes] = useState(
+    mThemes || [darkTheme, lightTheme, "system"]
+  );
+  const [toggleThemes, setToggleThemes] = useState(
+    mThemes
+      ? mThemes.filter((theme) => theme !== "system")
+      : [darkTheme, lightTheme]
+  );
+
+  useEffect(() => {
+    if (mThemes && mThemes.includes("system")) {
+      setThemes(mThemes);
+    } else
+      setThemes(
+        mThemes ? ["system", ...mThemes] : [darkTheme, lightTheme, "system"]
+      );
+  }, [darkTheme, lightTheme, mThemes]);
+
+  useEffect(() => {
+    setToggleThemes(
+      mThemes
+        ? mThemes.filter((theme) => theme !== "system")
+        : [darkTheme, lightTheme]
+    );
+  }, [darkTheme, lightTheme, mThemes, mToggleThemes]);
 
   const matches = useDarkMediaQuery();
 
-  const mounted = useIsMounted();
-
   // Gets the theme with respect to our handlers
   const getRespectedTheme = useCallback((): ThemeState => {
-    let theme;
+    let resolvedTheme;
     storageHandlers.forEach((handler) => {
       const tempTheme = handler.getTheme();
-      if (tempTheme && themes.includes(tempTheme)) theme = tempTheme;
+      if (tempTheme && themes.includes(tempTheme)) resolvedTheme = tempTheme;
     });
 
-    if (!theme) {
+    if (!resolvedTheme) {
       if (!isBrowser) {
-        theme = null;
+        resolvedTheme = null;
       } else if (themes.includes(defaultTheme)) {
-        theme = defaultTheme;
+        resolvedTheme = defaultTheme;
       } else {
         console.error(
           `Unknown theme: ${defaultTheme}. Have you included it in the themes prop?`
         );
-        theme = "system";
+        resolvedTheme = "system";
       }
     }
 
-    let resolvedTheme = null;
-    if (theme === "system") resolvedTheme = matches ? darkTheme : lightTheme;
+    let theme = resolvedTheme;
+    if (theme === "system") theme = matches ? darkTheme : lightTheme;
     return { theme, resolvedTheme };
   }, [storageHandlers, matches, darkTheme, lightTheme, themes, defaultTheme]);
 
@@ -161,12 +183,12 @@ const Provider: FC<ProviderProps> = ({
   // Context for our hook
   const providerValue: UseThemeContext = useMemo(
     () => ({
-      themes,
+      themes: toggleThemes,
       handleChange,
       value: themeState.theme,
       resolvedTheme: themeState.resolvedTheme,
     }),
-    [handleChange, themeState.resolvedTheme, themeState.theme, themes]
+    [handleChange, themeState.resolvedTheme, themeState.theme, toggleThemes]
   );
 
   // The attribute we're editing
@@ -189,8 +211,10 @@ const Provider: FC<ProviderProps> = ({
         <script
           dangerouslySetInnerHTML={{
             __html: `!function(){var e;${handleInject}${
-              mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
-            }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${setAttr}}();`,
+              mediaQuery
+                ? `e||(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");`
+                : `e||(e="${defaultTheme}");e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");`
+            }${setAttr}}();`,
           }}
         />
       </Head>
