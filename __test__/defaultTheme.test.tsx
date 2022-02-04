@@ -1,12 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import { localStorageMock } from "./__mocks__";
+import { systemMediaMock } from "./__mocks__";
 import { Basic } from "./components";
 import { ThemeProvider } from "../src";
 
 describe("Default theme test-suite", () => {
   beforeAll(() => {
-    localStorageMock();
+    systemMediaMock();
   });
 
   beforeEach(() => {

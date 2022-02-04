@@ -1,23 +1,24 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import { ThemeProvider, localStorage } from "../src";
-import { systemMediaMock } from "./__mocks__";
+import { ThemeProvider, sessionStorage } from "../src";
+import { sessionStorageMock, systemMediaMock } from "./__mocks__";
 import { Basic, ChangeTheme } from "./components";
 
 describe("LocalStorage test-suite", () => {
   beforeAll(() => {
     systemMediaMock();
+    sessionStorageMock();
   });
 
   beforeEach(() => {
-    window.localStorage.clear();
+    window.sessionStorage.clear();
   });
 
   test("Tests session storage works with key", () => {
     render(
       <ThemeProvider
         themes={["tech", "dark", "light"]}
-        storageHandlers={[localStorage({ key: "Test" })]}
+        storageHandlers={[sessionStorage({ key: "test" })]}
       >
         <ChangeTheme newTheme="tech" />
       </ThemeProvider>
@@ -29,7 +30,7 @@ describe("LocalStorage test-suite", () => {
     render(
       <ThemeProvider
         themes={["tech", "dark", "light"]}
-        storageHandlers={[localStorage({ key: "Test" })]}
+        storageHandlers={[sessionStorage({ key: "test" })]}
       >
         <Basic />
       </ThemeProvider>
@@ -41,7 +42,7 @@ describe("LocalStorage test-suite", () => {
 
   test("Checking tech theme is stored into local storage and read", () => {
     render(
-      <ThemeProvider themes={["tech"]}>
+      <ThemeProvider themes={["tech"]} storageHandlers={[sessionStorage()]}>
         <ChangeTheme newTheme="tech" />
       </ThemeProvider>
     );
@@ -50,7 +51,7 @@ describe("LocalStorage test-suite", () => {
     expect(screen.getByTestId("changeTheme-theme").textContent).toBe("tech");
 
     render(
-      <ThemeProvider themes={["tech"]}>
+      <ThemeProvider themes={["tech"]} storageHandlers={[sessionStorage()]}>
         <Basic />
       </ThemeProvider>
     );
@@ -61,7 +62,7 @@ describe("LocalStorage test-suite", () => {
 
   test("Checking only listed themes are read", () => {
     render(
-      <ThemeProvider themes={["tech"]}>
+      <ThemeProvider themes={["tech"]} storageHandlers={[sessionStorage()]}>
         <ChangeTheme newTheme="tech" />
       </ThemeProvider>
     );
@@ -70,7 +71,7 @@ describe("LocalStorage test-suite", () => {
     expect(screen.getByTestId("changeTheme-theme").textContent).toBe("tech");
 
     render(
-      <ThemeProvider>
+      <ThemeProvider storageHandlers={[sessionStorage()]}>
         <Basic />
       </ThemeProvider>
     );

@@ -12,7 +12,7 @@ export const ChangeTheme = ({ newTheme }: ChangeThemeProps) => {
 
   useEffect(() => {
     setTheme(newTheme);
-  }, [newTheme, setTheme]);
+  }, []);
 
   return (
     <>
