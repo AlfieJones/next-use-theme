@@ -1,7 +1,5 @@
 <div align="center">
     <img alt="NPM version" src="https://img.shields.io/npm/v/next-use-theme?style=for-the-badge">
-    <img alt="NPM downloads" src="https://img.shields.io/npm/dm/next-use-theme?style=for-the-badge">
-    <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/alfieJones/next-use-theme?style=for-the-badge">
 </div>
 
 <!-- PROJECT LOGO -->
