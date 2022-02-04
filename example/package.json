@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "next": "12",
-    "next-use-theme": "^1.1.0",
+    "next-use-theme": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

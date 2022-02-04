@@ -35,6 +35,18 @@ const setInject = (providers: Handler[], index: number = 0): string => {
   )}`;
 };
 
+const getThemes = (themes: string[], darkTheme: string, lightTheme: string) => {
+  if (themes && themes.includes("system")) {
+    return themes;
+  }
+  return themes ? ["system", ...themes] : [darkTheme, lightTheme, "system"];
+};
+
+const getToggles = (themes: string[], darkTheme: string, lightTheme: string) =>
+  themes
+    ? themes.filter((theme) => theme !== "system")
+    : [darkTheme, lightTheme];
+
 const Provider: FC<ProviderProps> = ({
   mediaQuery = DefaultProps.mediaQuery,
   attribute = DefaultProps.attribute,
@@ -52,29 +64,18 @@ const Provider: FC<ProviderProps> = ({
   const mounted = useIsMounted();
 
   const [themes, setThemes] = useState(
-    mThemes || [darkTheme, lightTheme, "system"]
+    getThemes(mThemes, darkTheme, lightTheme)
   );
   const [toggleThemes, setToggleThemes] = useState(
-    mThemes
-      ? mThemes.filter((theme) => theme !== "system")
-      : [darkTheme, lightTheme]
+    getToggles(mThemes, darkTheme, lightTheme)
   );
 
   useEffect(() => {
-    if (mThemes && mThemes.includes("system")) {
-      setThemes(mThemes);
-    } else
-      setThemes(
-        mThemes ? ["system", ...mThemes] : [darkTheme, lightTheme, "system"]
-      );
+    setThemes(getThemes(mThemes, darkTheme, lightTheme));
   }, [darkTheme, lightTheme, mThemes]);
 
   useEffect(() => {
-    setToggleThemes(
-      mThemes
-        ? mThemes.filter((theme) => theme !== "system")
-        : [darkTheme, lightTheme]
-    );
+    setToggleThemes(getToggles(mThemes, darkTheme, lightTheme));
   }, [darkTheme, lightTheme, mThemes, mToggleThemes]);
 
   const matches = useDarkMediaQuery();
