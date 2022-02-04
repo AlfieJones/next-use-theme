@@ -843,10 +843,10 @@ nanoid@^3.1.30:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.2.0.tgz#62667522da6673971cca916a6d3eff3f415ff80c"
   integrity sha512-fmsZYa9lpn69Ad5eDn7FMcnnSR+8R34W9qJEijxYhTbfOWzr22n1QxCMzXLK+ODyW2973V3Fux959iQoUxzUIA==
 
-next-use-theme@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/next-use-theme/-/next-use-theme-1.0.17.tgz#2b3ef0e130116ef93fdb20812c88b1823ec09999"
-  integrity sha512-F8m1Eq2faeOs+jzyt5P3FpGrpjZV3AZ7T81Fk6KQctXvIL6KgqWmMtp7FbPhfBXHvo6TNlXYJcFtlgWnk5BRBA==
+next-use-theme@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/next-use-theme/-/next-use-theme-1.1.0.tgz#22c6149d17efa0da9c030d9fffafcfaed5c4957b"
+  integrity sha512-V+S07nKW6g/Dt6bU3QzJZQ+D3KmvTElt606ZOviIKU+Q9t1zBgSr+sNbJmwDleiZdSpdjfcS7/WXbQgakwkIoA==
 
 next@12:
   version "12.0.10"
