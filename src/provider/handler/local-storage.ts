@@ -1,7 +1,11 @@
 import { useEffect } from "react";
-import { HandlerConfig } from ".";
 import isBrowser from "../../utils/isBrowser";
-import { Handler, defaultConfig, HandlerTypes } from "./handler.types";
+import {
+  Handler,
+  defaultConfig,
+  HandlerTypes,
+  HandlerConfig,
+} from "./handler.types";
 
 const codeInject = (key: string) => `localStorage.getItem('${key}')`;
 
