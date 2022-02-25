@@ -42,11 +42,11 @@ To get a local copy up and running follow these simple example steps.
 
 Install the package as a dependency
   ```sh
-  npm install next-theme
+  npm install next-use-theme
   ```
   or with yarn
   ```sh
-  yarn add next-theme
+  yarn add next-use-theme
   ```
 
 ### Usage
