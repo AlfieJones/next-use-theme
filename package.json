@@ -1,6 +1,6 @@
 {
   "name": "next-use-theme",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "description": "A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded Flash of incorrect theme",
   "license": "MIT",
   "repository": "https://github.com/AlfieJones/next-use-theme",
@@ -44,6 +44,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
+    "@types/js-cookie": "^3.0.1",
     "@types/next": "^9.0.0",
     "@types/react": "^17.0.14",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
@@ -67,5 +68,7 @@
     "react-dom": "^17.0.2",
     "typescript": "^4.3.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "js-cookie": "^3.0.1"
+  }
 }
