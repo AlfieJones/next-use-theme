@@ -8,7 +8,7 @@ export const DefaultProps = {
   lightTheme: "light",
   defaultTheme: "system",
   storageHandlers: [localStorage()],
-  respectHandlerOrder: false,
+  respectHandlerOrder: true,
 };
 
 // TODO improve typings

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { isBrowser } from "../../utils";
-import { useRouter } from 'next/router'
 import {
   HandlerConfig,
   Handler,
@@ -9,9 +8,9 @@ import {
 } from "./handler.types";
 
 const codeInject = (key: string) =>
-  `(new URLSearchParams(location.search)).get('${key}');`;
+  `(new URLSearchParams(window.location.search)).get('${key}');`;
 
-const handleChange = (key: string, router: NextRouter) => (theme: string, type: HandlerTypes) => {
+const handleChange = (key: string) => (theme: string, type: HandlerTypes) => {
   if (type !== "url" && isBrowser) {
     const sParam = new URLSearchParams(window.location.search);
     sParam.set(key, theme);
