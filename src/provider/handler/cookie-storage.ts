@@ -41,8 +41,7 @@ const setListener =
           // @ts-ignore
           cookieStore.removeEventListener("change", listener);
           // eslint-disable-next-line no-empty
-        } finally {
-        }
+        } catch {}
       };
     }, [fn]);
   };
