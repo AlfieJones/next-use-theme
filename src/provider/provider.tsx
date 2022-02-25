@@ -1,5 +1,5 @@
 import React, { useEffect, FC, useCallback, useState, useMemo } from "react";
-import Head from "next/head";
+import Script from "next/script";
 import {
   UseThemeContext,
   DefaultProps,
@@ -208,15 +208,11 @@ const Provider: FC<ProviderProps> = ({
 
   return (
     <>
-      <Head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `!function(){var e;${handleInject}${
-              mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
-            }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${setAttr}}();`,
-          }}
-        />
-      </Head>
+      <Script id="next-use-theme" strategy="beforeInteractive">
+        {`!function(){var e;${handleInject}${
+          mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
+        }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${setAttr}}();`}
+      </Script>
       <ThemeContext.Provider value={providerValue}>
         {children}
       </ThemeContext.Provider>
