@@ -206,13 +206,17 @@ const Provider: FC<ProviderProps> = ({
     [storageHandlers]
   );
 
+  const script = `!function(){var e;${handleInject}${
+    mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
+  }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${setAttr}}();`;
+
+  const src = `data:text/javascript;base64,${
+    isBrowser ? window.btoa(script) : Buffer.from(script).toString("base64")
+  }`;
+
   return (
     <>
-      <Script id="next-use-theme" strategy="beforeInteractive">
-        {`!function(){var e;${handleInject}${
-          mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
-        }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${setAttr}}();`}
-      </Script>
+      <Script id="next-use-themes" strategy="beforeInteractive" src={src} />
       <ThemeContext.Provider value={providerValue}>
         {children}
       </ThemeContext.Provider>
