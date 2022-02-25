@@ -6,7 +6,7 @@ import { ThemeProvider, urlStorage } from "next-use-theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider themes={["dark", "light", "tech"]} storageHandlers={[urlStorage()]}>
+    <ThemeProvider themes={["dark", "light", "tech"]}>
       <Component {...pageProps} />
     </ThemeProvider>
   );
