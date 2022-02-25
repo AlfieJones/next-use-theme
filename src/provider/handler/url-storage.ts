@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { isBrowser } from "../../utils";
 import {
   HandlerConfig,
   Handler,
@@ -7,29 +8,30 @@ import {
 } from "./handler.types";
 
 const codeInject = (key: string) =>
-  `(new URLSearchParams(location.search)).get('${key}');`;
+  `(new URLSearchParams(window.location.search)).get('${key}');`;
 
 const handleChange = (key: string) => (theme: string, type: HandlerTypes) => {
-  if (type !== "url") localStorage.setItem(key, theme);
+  if (type !== "url" && isBrowser) {
+    const sParam = new URLSearchParams(window.location.search);
+    sParam.set(key, theme);
+    const path = `${window.location.protocol}//${window.location.host}${
+      window.location.pathname
+    }?${sParam.toString()}`;
+
+    window.history.pushState({ path }, "", path);
+  }
 };
 
-const getTheme = (key: string) => () => localStorage.getItem(key);
+const getTheme = (key: string) => () =>
+  isBrowser ? new URLSearchParams(window.location.search).get(key) : null;
 
 const setListener =
   (key: string) => (fn: (theme: string | null, type: HandlerTypes) => void) => {
+    const theme = getTheme(key)();
+
     useEffect(() => {
-      const listener = (e: StorageEvent) => {
-        if (e.key === key && e.oldValue !== e.newValue) {
-          fn(e.newValue, "url");
-        }
-      };
-
-      window.addEventListener("storage", listener);
-
-      return () => {
-        window.removeEventListener("storage", listener);
-      };
-    }, [fn]);
+      fn(theme, "url");
+    }, [fn, theme]);
   };
 
 export default ({
