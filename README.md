@@ -53,20 +53,53 @@ Install the package as a dependency
 We need to wrap the component tree with our component and so it's recommend we do this in the _app file.
 If you haven't already got one, create a custom [_app](https://nextjs.org/docs/advanced-features/custom-app) and wrap the Component with our ThemeProvider.
 
+Since both the ThemeProvider and ThemeScript require the same props to function properly, it's recommended to store these in a global variable.
+
+This example uses a config stored in [_app](https://nextjs.org/docs/advanced-features/custom-app) but it can also be placed into its own file.
+
+
 
 ```JS
 // Example pages/_app.js
-import { ThemeProvider } from "next-theme";
+import { ThemeProvider } from "next-use-theme";
+
+export const config = {
+  themes: ["dark", "light", "tech"]
+}
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider>
+    <ThemeProvider {...config}>
       <Component {...pageProps} />
     </ThemeProvider>
   );
 }
 
 export default MyApp;
+```
+
+To avoid the FOIT (Flash of Incorrect Theme) we need to inject a script into the Head to run before React/Nextjs. We do this with a custom [_document](https://nextjs.org/docs/advanced-features/custom-document)
+
+
+```JS
+// Example pages/_document.js
+import { Html, Head, Main, NextScript } from 'next/document'
+import { ThemeScript } from 'next-use-theme'
+import { config } from './_app';
+
+export default function Document() {
+  return (
+    <Html>
+      <Head >
+          <ThemeScript {...config} />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  )
+}
 ```
 
 Then we you can use our hook useTheme() to access and change the current theme
@@ -94,31 +127,121 @@ function ThemeButtons() {
 }
 ```
 
+## API
 
+### ThemeConfig
+Themes are the props for both the ThemeProvider and ThemeScript.
+
+<b>These are all optional</b>
+
+<dl>
+
+  <dt><code>themes</code>: string[]</dt>
+  <dd>List of all available theme names, defaults to the two props [lightTheme, darkTheme], eg ["lightTheme", "darkTheme"]</dd>
+  <dd>
+    <b>Default:</b> [lightTheme, darkTheme, "system"]
+  </dd>
+
+  <dt><code>defaultTheme</code>: string</dt>
+  <dd>Default theme, this must also exist in themes</dd>
+  <dd>
+    <b>Default:</b> "system"
+  </dd>
+
+  <dt><code>lightTheme</code>: string</dt>
+  <dd>Light theme name</dd>
+  <dd>
+    <b>Default:</b> "light"
+  </dd>
+
+  <dt><code>darkTheme</code>: string</dt>
+  <dd>Dark theme name</dd>
+  <dd>
+    <b>Default:</b> "dark"
+  </dd>
+
+  <dt><code>toggleThemes</code>: string[]</dt>
+  <dd>Themes for the toggle to loop through</dd>
+  <dd>
+    <b>Default:</b> [lightTheme, darkTheme]
+  </dd>
+
+  <dt><code>attribute</code>: `data-${string}` | "class"</dt>
+  <dd>The HTML attribute to be set</dd>
+  <dd>
+    <b>Default:</b> "class"
+  </dd>
+
+  <dt><code>mediaQuery</code>: boolean</dt>
+  <dd>Use media query to toggle the theme between light and dark. If true and no storage handlers find a theme, next-theme falls back onto the media query</dd>
+  <dd>
+    <b>Default:</b> true
+  </dd>
+
+  <dt><code>colorScheme</code>: boolean</dt>
+  <dd>Should we set the meta tag colorScheme, if default theme is dark we set it to dark light otherwise light dark</dd>
+  <dd>
+    <b>Default:</b> true
+  </dd>
+
+  <dt><code>onChange</code>: (theme: string, resolvedTheme: string) => void</dt>
+  <dd>Handle the theme change yourself. Setting this disables next-theme from setting the attribute</dd>
+  <dd>
+    <b>Default:</b> undefined
+  </dd>
+
+  <dt><code>storageHandlers</code>: Handler[]</dt>
+  <dd>The array of storage handlers. Used to customize where we get and store our theme information</dd>
+  <dd>
+    <b>Default:</b> [localStorage()]
+  </dd>
+
+  <dt><code>respectHandlerOrder</code>: boolean</dt>
+  <dd>If true, when a handler changes we only use the value of the first handler to yield a valid theme. If false, we accept the new value if valid</dd>
+  <dd>
+    <b>Default:</b> false
+  </dd>
+
+</dl>
+
+### UseTheme
+Returns for the useTheme Hook
+
+<dl>
+
+  <dt><code>theme</code>: string</dt>
+  <dd>The current theme set</dd>
+
+  <dt><code>setTheme</code>: (theme: string) => void</dt>
+  <dd>Change the current theme, only themes listed to the provider are accepted</dd>
+
+  <dt><code>toggle</code>: () => void;</dt>
+  <dd>Toggle the theme, this goes through the toggle themes listed to the provider</dd>
+
+  <dt><code>resolvedTheme</code>: string</dt>
+  <dd>Same as theme unless system theme is set, then shows 'system' while theme holds dark/light (set by provider)</dd>
+
+</dl>
+
+
+### TypeScript
+
+This project is written in TypeScript and therefore fully supports it. 
  
 ## About The Project
 
 I built this project to make theme handling much easier and hassle free. It's amazing how hard it is to handle theme changes so I hope this project makes your life easier
 
-Features:
+### Features:
 * No horrible flash of incorrect theme (FOIT) 
 * Easy to use hook and wrapper
-* Highly customisable
+* Highly customizable
 * Lightweight
 
-<!-- CONTRIBUTING -->
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-<!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.

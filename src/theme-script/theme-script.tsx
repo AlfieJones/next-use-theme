@@ -35,7 +35,7 @@ const ThemeScript: FC<ThemeConfig> = ({
   mediaQuery = DefaultProps.mediaQuery,
   darkTheme = DefaultProps.darkTheme,
   lightTheme = DefaultProps.lightTheme,
-  colorScheme = true,
+  colorScheme = DefaultProps.colorScheme,
 }: ThemeConfig) => {
   const codeInject = `!function(){var e;${setInject(storageHandlers)}${
     mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
