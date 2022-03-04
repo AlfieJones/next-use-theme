@@ -6,7 +6,7 @@ import {
   ProviderProps,
   ThemeState,
 } from "./provider.types";
-
+import { Handler } from "./handler";
 import { isBrowser, useDarkMediaQuery, useIsMounted } from "../utils";
 import { HandlerTypes } from "./handler/handler.types";
 
@@ -16,6 +16,24 @@ export const ThemeContext = React.createContext<UseThemeContext>({
   resolvedTheme: null,
   handleChange: () => {},
 });
+
+// Recursively add our prover injections
+// TODO Investigate need for try catch
+const setInject = (providers: Handler[], index: number = 0): string => {
+  if (providers.length === 0 || index === providers.length) {
+    return "";
+  }
+  if (index === 0) {
+    return `try{e=${providers[index]?.codeInject};}catch(_){}${setInject(
+      providers,
+      index + 1
+    )}`;
+  }
+  return `try{e||(e=${providers[index]?.codeInject});}catch(_){}${setInject(
+    providers,
+    index + 1
+  )}`;
+};
 
 const getThemes = (themes: string[], darkTheme: string, lightTheme: string) => {
   if (themes && themes.includes("system")) {
@@ -174,10 +192,40 @@ const Provider: FC<ProviderProps> = ({
     [handleChange, themeState.resolvedTheme, themeState.theme, toggleThemes]
   );
 
+  // The attribute we're editing
+  const setAttr = useMemo(() => {
+    if (attribute === "class") {
+      return "document.documentElement.classList.add(e);";
+    }
+    return `document.documentElement.setAttribute('${attribute}',e);`;
+  }, [attribute]);
+
+  // Code to be run on page load. This uses our storage handlers
+  const handleInject = useMemo(
+    () => setInject(storageHandlers),
+    [storageHandlers]
+  );
+
+  const script = `!function(){var e;${handleInject}${
+    mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
+  }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${setAttr}}();`;
+
+  const src = `data:text/javascript;base64,${
+    isBrowser ? window.btoa(script) : Buffer.from(script).toString("base64")
+  }`;
+
   return (
-    <ThemeContext.Provider value={providerValue}>
-      {children}
-    </ThemeContext.Provider>
+    <>
+      <Script
+        id="next-use-themes"
+        strategy="beforeInteractive"
+        src={src}
+        defer={false}
+      />
+      <ThemeContext.Provider value={providerValue}>
+        {children}
+      </ThemeContext.Provider>
+    </>
   );
 };
 

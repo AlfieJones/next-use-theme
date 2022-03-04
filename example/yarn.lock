@@ -848,10 +848,10 @@ nanoid@^3.1.30:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.2.0.tgz#62667522da6673971cca916a6d3eff3f415ff80c"
   integrity sha512-fmsZYa9lpn69Ad5eDn7FMcnnSR+8R34W9qJEijxYhTbfOWzr22n1QxCMzXLK+ODyW2973V3Fux959iQoUxzUIA==
 
-next-use-theme@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/next-use-theme/-/next-use-theme-2.0.7.tgz#38ca32ad6be5e12ceef1c52d6a04cc8a13e2e2db"
-  integrity sha512-5VWOvXoFJdE2tWxMgQq5Edgp7lWct4+VIenPEcp/0fcd46ygo6XaWGgi6M4SmSbL92NJ/v9Y/3yIH0/9+8Ub5g==
+next-use-theme@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/next-use-theme/-/next-use-theme-2.1.0.tgz#eb288ca6b10698d39a595c6d3383f4dc3a29e5e3"
+  integrity sha512-Zit4Jwj/YS0FIwj5pCUsAno4+QC6v/BHBbY4Va04X/CtGD5VOfvGjhgy0WV/cMDpqN3nweD0gZedHlefZOF5pw==
   dependencies:
     js-cookie "^3.0.1"
 

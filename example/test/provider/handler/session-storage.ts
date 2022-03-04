@@ -7,36 +7,36 @@ import {
   HandlerTypes,
 } from "./handler.types";
 
-const codeInject = (key: string) =>
-  `(new URLSearchParams(window.location.search)).get('${key}')`;
+const codeInject = (key: string) => `sessionStorage.getItem('${key}')`;
 
 const handleChange = (key: string) => (theme: string, type: HandlerTypes) => {
-  if (type !== "url" && isBrowser) {
-    const sParam = new URLSearchParams(window.location.search);
-    sParam.set(key, theme);
-    const path = `${window.location.protocol}//${window.location.host}${
-      window.location.pathname
-    }?${sParam.toString()}`;
-
-    window.history.pushState({ path }, "", path);
-  }
+  if (isBrowser && type !== "sessionStorage")
+    sessionStorage.setItem(key, theme);
 };
 
 const getTheme = (key: string) => () =>
-  isBrowser ? new URLSearchParams(window.location.search).get(key) : null;
+  isBrowser ? sessionStorage.getItem(key) : null;
 
 const setListener =
   (key: string) => (fn: (theme: string | null, type: HandlerTypes) => void) => {
-    const theme = getTheme(key)();
-
     useEffect(() => {
-      fn(theme, "url");
-    }, [fn, theme]);
+      const listener = (e: StorageEvent) => {
+        if (e.key === key && e.oldValue !== e.newValue) {
+          fn(e.newValue, "sessionStorage");
+        }
+      };
+
+      window.addEventListener("storage", listener);
+
+      return () => {
+        window.removeEventListener("storage", listener);
+      };
+    }, [fn]);
   };
 
 export default ({
-  key,
-  storeUpdates,
+  key = defaultConfig.key,
+  storeUpdates = defaultConfig.storeUpdates,
 }: HandlerConfig = defaultConfig): Handler => ({
   codeInject: codeInject(key),
   onChange: storeUpdates ? handleChange(key) : () => {},
