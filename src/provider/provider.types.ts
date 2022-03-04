@@ -10,6 +10,7 @@ export const DefaultProps = {
   defaultTheme: "system",
   storageHandlers: [localStorage()],
   respectHandlerOrder: false,
+  colorScheme: true,
 };
 
 export type ThemeState = {
