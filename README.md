@@ -24,8 +24,16 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#Usage">Usage</a></li>
+        <li>
+          <a href="#Api">API</a>
+          <ul>
+            <li><a href="#themeconfig">ThemeConfig</a></li>
+          <li><a href="#usetheme">UseTheme</a></li>
+          </ul>
+          </li>
       </ul>
     </li>
+    <li><a href="#typescript">Typescript</a></li>
     <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
