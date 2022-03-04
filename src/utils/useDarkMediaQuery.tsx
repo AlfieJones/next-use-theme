@@ -16,7 +16,7 @@ const useDarkMediaQuery = () => {
     return (
       mql && mql.removeEventListener("change", () => setMatches(mql.matches))
     );
-  }, []);
+  }, [mql]);
 
   return matches;
 };

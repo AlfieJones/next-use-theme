@@ -19,7 +19,7 @@ export type ThemeState = {
 };
 
 // TODO improve typings
-export type ProviderProps = {
+export type ThemeConfig = {
   /** Use media query to toggle the theme between light and dark. If true and no storage handlers find a theme, next-theme falls back onto the media query */
   mediaQuery?: boolean;
   /** The HTML attribute to be set. Defaults to class */
@@ -40,6 +40,8 @@ export type ProviderProps = {
   toggleThemes?: string[];
   /** Handle the theme change yourself. Setting this disables next-theme from setting the attribute */
   onChange?: (theme: string, resolvedTheme: string) => void;
+  /** Should we set the meta tag colorScheme, if default theme is dark we set it to dark light otherwise light dark */
+  colorScheme?: boolean;
   /** The components children */
   children?: ReactNode;
 };

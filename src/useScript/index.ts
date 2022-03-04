@@ -1,4 +1,4 @@
-import useTheme from "./use-script";
+import useScript from "./use-script";
 
-export type { UseThemeType } from "./use-script.types";
-export default useTheme;
+export type { UseScriptType } from "./use-script.types";
+export default useScript;

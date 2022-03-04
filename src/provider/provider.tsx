@@ -1,9 +1,8 @@
 import React, { useEffect, FC, useCallback, useState, useMemo } from "react";
-import Script from "next/script";
 import {
   UseThemeContext,
   DefaultProps,
-  ProviderProps,
+  ThemeConfig,
   ThemeState,
 } from "./provider.types";
 
@@ -29,7 +28,7 @@ const getToggles = (themes: string[], darkTheme: string, lightTheme: string) =>
     ? themes.filter((theme) => theme !== "system")
     : [darkTheme, lightTheme];
 
-const Provider: FC<ProviderProps> = ({
+const Provider: FC<ThemeConfig> = ({
   mediaQuery = DefaultProps.mediaQuery,
   attribute = DefaultProps.attribute,
   themes: mThemes,
@@ -41,7 +40,7 @@ const Provider: FC<ProviderProps> = ({
   toggleThemes: mToggleThemes,
   onChange,
   children,
-}: ProviderProps) => {
+}: ThemeConfig) => {
   // Set out default props
   const mounted = useIsMounted();
 

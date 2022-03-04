@@ -12,7 +12,7 @@ export const DefaultProps = {
 };
 
 // TODO improve typings
-export type ProviderProps = {
+export type ThemeConfig = {
   /** Use media query to toggle the theme between light and dark. If true and no storage handlers find a theme, next-theme falls back onto the media query */
   mediaQuery?: boolean;
   /** The HTML attribute to be set. Defaults to class */

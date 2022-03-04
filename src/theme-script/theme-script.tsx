@@ -1,6 +1,6 @@
-import React from "react";
-import { Handler, ProviderProps } from "../provider";
-import { UseScriptType } from "./use-script.types";
+import React, { FC } from "react";
+import { Handler, ThemeConfig } from "../provider";
+import { DefaultProps } from "../provider/provider.types";
 
 // Recursively add our prover injections
 // TODO Investigate need for try catch
@@ -28,23 +28,32 @@ const getSetAttr = (attribute: string) => {
   return `document.documentElement.setAttribute('${attribute}',e);`;
 };
 
-const useScript: UseScriptType = (config: ProviderProps) => {
-  const {
-    attribute,
-    storageHandlers,
-    defaultTheme,
-    mediaQuery,
-    darkTheme,
-    lightTheme,
-  } = config;
-
+const ThemeScript: FC<ThemeConfig> = ({
+  attribute = DefaultProps.attribute,
+  storageHandlers = DefaultProps.storageHandlers,
+  defaultTheme = DefaultProps.defaultTheme,
+  mediaQuery = DefaultProps.mediaQuery,
+  darkTheme = DefaultProps.darkTheme,
+  lightTheme = DefaultProps.lightTheme,
+  colorScheme = true,
+}: ThemeConfig) => {
   const codeInject = `!function(){var e;${setInject(storageHandlers)}${
     mediaQuery ? `e||(e="system");` : `e||(e="${defaultTheme}");`
   }e==="system"&&(e=window.matchMedia("(prefers-color-scheme: dark)").matches?"${darkTheme}":"${lightTheme}");${getSetAttr(
     attribute
   )}}();`;
 
-  return <script>{codeInject}</script>;
+  return (
+    <>
+      {colorScheme && (
+        <meta
+          name="color-scheme"
+          content={defaultTheme === "dark" ? "dark light" : "light dark"}
+        />
+      )}
+      <script dangerouslySetInnerHTML={{ __html: codeInject }} />
+    </>
+  );
 };
 
-export default useScript;
+export default ThemeScript;
