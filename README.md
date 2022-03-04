@@ -24,13 +24,13 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#Usage">Usage</a></li>
-        <li>
-          <a href="#Api">API</a>
-          <ul>
-            <li><a href="#themeconfig">ThemeConfig</a></li>
-          <li><a href="#usetheme">UseTheme</a></li>
-          </ul>
-          </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Api">API</a>
+      <ul>
+        <li><a href="#themeconfig">ThemeConfig</a></li>
+      <li><a href="#usetheme">UseTheme</a></li>
       </ul>
     </li>
     <li><a href="#typescript">Typescript</a></li>
