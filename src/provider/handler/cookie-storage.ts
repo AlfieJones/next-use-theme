@@ -9,7 +9,7 @@ import {
 } from "./handler.types";
 
 const codeInject = (key: string) =>
-  `document.cookie.match('(^|;)\\s*${key}\\s*=\\s*([^;]+)')?.pop()`;
+  `document.cookie.match('(^|;)\\s*${key}\\s*=\\s*([^;]+)').pop()`;
 
 const handleChange = (key: string) => (theme: string, type: HandlerTypes) => {
   if (type !== "cookie" && isBrowser) {

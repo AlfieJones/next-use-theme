@@ -2,11 +2,15 @@
 import "../styles/globals.css";
 import React from "react";
 import type { AppProps } from "next/app";
-import { ThemeProvider, localStorage } from "next-use-theme";
+import { ThemeProvider, localStorage, ThemeConfig } from "next-use-theme";
+
+export const config: ThemeConfig = {
+  themes:["dark", "light", "tech"], storageHandlers:[localStorage()]
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider themes={["dark", "light", "tech"]} storageHandlers={[localStorage()]}>
+    <ThemeProvider {...config}>
       <Component {...pageProps} />
     </ThemeProvider>
   );

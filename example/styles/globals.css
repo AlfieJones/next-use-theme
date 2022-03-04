@@ -19,6 +19,7 @@ a {
   justify-content: center;
   align-items: center;
   height: 100%;
+  background-color: white;
 }
 
 .dark .container {
@@ -38,6 +39,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: black;
 }
 
 .dark main,

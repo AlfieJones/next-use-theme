@@ -1,6 +1,6 @@
 {
   "name": "next-use-theme",
-  "version": "2.1.0",
+  "version": "3.0.2",
   "description": "A NextJS wrapper component which provides a useTheme hook as well as dealing with theme changes and the dreaded Flash of incorrect theme",
   "license": "MIT",
   "repository": "https://github.com/AlfieJones/next-use-theme",

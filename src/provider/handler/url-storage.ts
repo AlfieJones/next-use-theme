@@ -8,7 +8,7 @@ import {
 } from "./handler.types";
 
 const codeInject = (key: string) =>
-  `(new URLSearchParams(window.location.search)).get('${key}');`;
+  `(new URLSearchParams(window.location.search)).get('${key}')`;
 
 const handleChange = (key: string) => (theme: string, type: HandlerTypes) => {
   if (type !== "url" && isBrowser) {
