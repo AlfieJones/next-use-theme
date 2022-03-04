@@ -3,6 +3,7 @@
 </div>
 
 <!-- PROJECT LOGO -->
+<img align="center" src="https://raw.githubusercontent.com/AlfieJones/next-use-theme/main/banner.png" />
 <br />
 <p align="center">
   <h1 align="center">Next Use Theme</h1>
