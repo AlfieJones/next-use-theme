@@ -1,10 +1,8 @@
+<!-- PROJECT LOGO -->
+<img width=100% src="https://raw.githubusercontent.com/AlfieJones/next-use-theme/main/banner.png" />
 <div align="center">
     <img alt="NPM version" src="https://img.shields.io/npm/v/next-use-theme?style=for-the-badge">
 </div>
-
-<!-- PROJECT LOGO -->
-<img width=100% src="https://raw.githubusercontent.com/AlfieJones/next-use-theme/main/banner.png" />
-<br />
 <p align="center">
   <h1 align="center">Extremely lightweight, Highly customizable</h1>
 
