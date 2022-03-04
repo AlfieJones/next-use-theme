@@ -232,7 +232,7 @@ Returns for the useTheme Hook
 </dl>
 
 
-### TypeScript
+## TypeScript
 
 This project is written in TypeScript and therefore fully supports it. 
  
