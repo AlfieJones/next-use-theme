@@ -241,6 +241,12 @@ I built this project to make theme handling much easier and hassle free. It's am
 * Highly customizable
 * Lightweight
 
+## Animated toggle
+I also maintain a library of animated toggles
+* [documentation](https://toggles.dev)
+* [repo](https://github.com/AlfieJones/theme-toggles)
+
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
